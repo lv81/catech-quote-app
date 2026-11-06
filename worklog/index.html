@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>씨에이텍 견적서·일지</title>
+<!-- Home-screen icon + name. The Apps Script page itself can't set these (it runs inside Google's iframe). -->
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="견적일지">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ffffff">
+<style>
+  :root { --red: #C4161C; --ink: #1f2328; --muted: #5d6470; --line: #e3e5e8; --bg: #ffffff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 16px/1.55 "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+         min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+  main { width: 100%; max-width: 380px; text-align: center; }
+  .logo { width: 96px; height: 96px; border-radius: 22px; box-shadow: 0 2px 10px rgba(0,0,0,.12); }
+  h1 { font-size: 20px; margin: 16px 0 4px; }
+  p { margin: 0; color: var(--muted); font-size: 15px; }
+  .btn { display: block; margin: 22px 0 0; padding: 14px; border-radius: 12px; background: var(--red);
+         color: #fff; font-weight: 700; text-decoration: none; }
+  ol { text-align: left; margin: 22px 0 0; padding: 16px 16px 16px 34px; border: 1px solid var(--line);
+       border-radius: 12px; color: var(--muted); font-size: 15px; }
+  ol b { color: var(--ink); }
+  .opening { display: none; }
+  body.go .opening { display: block; }
+  body.go .home { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <img class="logo" src="icons/icon-192.png" alt="">
+  <h1>씨에이텍 견적서 · 일지</h1>
+  <div class="opening"><p>견적서·일지 앱을 여는 중…</p></div>
+  <div class="home">
+    <p>견적서 발행 + 작업일지 기록</p>
+    <a class="btn" id="open" href="#">견적서·일지 앱 열기</a>
+    <ol>
+      <li>아이폰: 이 페이지를 <b>사파리</b>에서 열고</li>
+      <li><b>공유 ⬆</b> › <b>홈 화면에 추가</b></li>
+      <li>홈 화면의 <b>CA+ 아이콘</b>으로 실행</li>
+    </ol>
+  </div>
+</main>
+<script>
+  // The live Apps Script deployment (never changes: always update-deployment)
+  var APP = 'https://script.google.com/macros/s/AKfycbw5yr9oLX35NM3BJAjZxqZm_reXtpr6HodlTJgQw3ty2DJ1qTeVQkYLCp9O8lQgevP4yg/exec';
+  document.getElementById('open').href = APP;
+  // Opened from the home-screen icon (standalone, or start_url ?app) -> go straight to the app.
+  // Opened as a normal page -> stay, so Safari can "Add to Home Screen" this page (and its icon).
+  var launched = navigator.standalone === true
+    || (window.matchMedia && matchMedia('(display-mode: standalone)').matches)
+    || /[?&]app\b/.test(location.search);
+  if (launched) { document.body.className = 'go'; location.replace(APP); }
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+</script>
+</body>
+</html>
